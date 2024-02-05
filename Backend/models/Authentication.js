@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const UserSchema = mongoose.Schema({
     username: {
@@ -7,14 +8,25 @@ const UserSchema = mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true, // Ensures email is unique
+        match: /^\S+@\S+\.\S+$/ // Basic email format validation
     },
     password: {
         type: String,
         required: true
     },
-    confirmPassword: {
-        type: String,  // Keep this line, but consider not marking it as required
+});
+
+// Hash the password before saving to the database
+UserSchema.pre('save', async function (next) {
+    try {
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(this.password, salt);
+        this.password = hashedPassword;
+        next();
+    } catch (error) {
+        next(error);
     }
 });
 

@@ -1,0 +1,5 @@
+http://localhost:5000/loginUser
+http://localhost:5000/delete_user/65c0c7fd9b9677ad66c06696
+http://localhost:5000/update_user/65c0c7fd9b9677ad66c06696
+http://localhost:5000/user
+http://localhost:5000/get_user/65c0c7fd9b9677ad66c06696

@@ -8,7 +8,7 @@ const app = express();
 
 dotenv.config();
 
-app.use(cors()); // You can adjust the cors configuration based on your needs
+app.use(cors());
 app.use(express.json());
 
 // Testing server
@@ -16,7 +16,8 @@ app.get('/', (req, res) => {
     res.send('Zingalbell');
 });
 
-app.use('/api', route);
+// Remove '/api' prefix for the routes
+app.use(route);
 
 const port = process.env.PORT || 5000;
 

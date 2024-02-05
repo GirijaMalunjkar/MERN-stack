@@ -1,26 +1,40 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "./Authentication.css";
 import { useNavigate, Link } from "react-router-dom";
+import axios from 'axios';
 
 const Registration = () => {
   const navigate = useNavigate();
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (validateForm()) {
-      
-      navigate("/home");
-      toggleForm();
-        console.log('Form is valid. Performing sign-in.');
-      } else {
-        console.log('Form is invalid. Please check errors.');
+      try {
+        // Make a POST request to the server for user registration
+        const response = await axios.post('http://localhost:5000/user', {
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+        });
+
+        console.log('Registration successful:', response.data);
+
+        // Navigate to the home page or perform other actions
+        navigate("/home");
+        toggleForm();
+      } catch (error) {
+        console.error('Error during registration:', error);
       }
+    } else {
+      console.log('Form is invalid. Please check errors.');
+    }
   };
 
- 
   const toggleForm = () => {
     const container = document.querySelector('.container');
     container.classList.toggle('active');
   };
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -71,28 +85,28 @@ const Registration = () => {
       <div className="container">
         <div className="user">
           <div className="formBx">
-          <form onSubmit={(e) => { e.preventDefault(); handleSignUp(); }}>
-      <h2>Create an account</h2>
-      <input type="text" name="username" placeholder="Username" autoComplete="username" onChange={handleChange} />
-      {errors.username && <p className="error">{errors.username}</p>}
+            <form onSubmit={(e) => { e.preventDefault(); handleSignUp(); }}>
+              <h2>Create an account</h2>
+              <input type="text" name="username" placeholder="Username" autoComplete="username" onChange={handleChange} />
+              {errors.username && <p className="error">{errors.username}</p>}
 
-      <input type="email" name="email" placeholder="Email Address" autoComplete="email" onChange={handleChange} />
-      {errors.email && <p className="error">{errors.email}</p>}
+              <input type="email" name="email" placeholder="Email Address" autoComplete="email" onChange={handleChange} />
+              {errors.email && <p className="error">{errors.email}</p>}
 
-      <input type="password" name="password" placeholder="Create Password" autoComplete="new-password" onChange={handleChange} />
-      {errors.password && <p className="error">{errors.password}</p>}
+              <input type="password" name="password" placeholder="Create Password" autoComplete="new-password" onChange={handleChange} />
+              {errors.password && <p className="error">{errors.password}</p>}
 
-      <input type="password" name="confirmPassword" placeholder="Confirm Password" autoComplete="new-password" onChange={handleChange} />
-      {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
+              <input type="password" name="confirmPassword" placeholder="Confirm Password" autoComplete="new-password" onChange={handleChange} />
+              {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
 
-      <input type="submit" value="Registration" />
-      <p className="signup">
-        Already have an account?{" "}
-        <Link to="/">
-          Sign in.
-        </Link>
-      </p>
-    </form>
+              <input type="submit" value="Registration" />
+              <p className="signup">
+                Already have an account?{" "}
+                <Link to="/">
+                  Sign in.
+                </Link>
+              </p>
+            </form>
           </div>
           <div className="imgBx">
             <img src="https://raw.githubusercontent.com/WoojinFive/CSS_Playground/master/Responsive%20Login%20and%20Registration%20Form/img2.jpg" alt="" />
